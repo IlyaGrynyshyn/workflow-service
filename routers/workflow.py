@@ -29,12 +29,7 @@ def get_workflow(workflow_id: int, db: Session = Depends(get_db)):
 def update_workflow(
     workflow_id: int, data: WorkflowUpdateSchema, db: Session = Depends(get_db)
 ):
-    update_workflow = workflows_services.update_workflow(
-        workflow_id=workflow_id, data=data, db=db
-    )
-    if not update_workflow:
-        raise HTTPException(status_code=404, detail="Workflow not found")
-    return update_workflow
+    return workflows_services.update_workflow(workflow_id=workflow_id, data=data, db=db)
 
 
 @router.delete(
