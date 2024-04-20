@@ -10,12 +10,12 @@ router = APIRouter()
 workflows_services = WorkflowServices()
 
 
-@router.post("/create/", status_code=status.HTTP_201_CREATED)
+@router.post("/create/", status_code=status.HTTP_201_CREATED, tags=["workflows"])
 def create_workflow(workflow_data: WorkflowCreateSchema, db: Session = Depends(get_db)):
     return workflows_services.create_workflow(workflow_data=workflow_data, db=db)
 
 
-@router.get("/get/{workflow_id}/", status_code=status.HTTP_200_OK)
+@router.get("/get/{workflow_id}/", status_code=status.HTTP_200_OK, tags=["workflows"])
 def get_workflow(workflow_id: int, db: Session = Depends(get_db)):
     workflow = workflows_services.get_workflow(workflow_id=workflow_id, db=db)
     if workflow:
@@ -23,7 +23,9 @@ def get_workflow(workflow_id: int, db: Session = Depends(get_db)):
     raise HTTPException(status_code=404, detail="Workflow not found")
 
 
-@router.put("/update/{workflow_id}/", status_code=status.HTTP_200_OK)
+@router.put(
+    "/update/{workflow_id}/", status_code=status.HTTP_200_OK, tags=["workflows"]
+)
 def update_workflow(
     workflow_id: int, data: WorkflowUpdateSchema, db: Session = Depends(get_db)
 ):
@@ -35,7 +37,9 @@ def update_workflow(
     return update_workflow
 
 
-@router.delete("/delete/{workflow_id}/", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete(
+    "/delete/{workflow_id}/", status_code=status.HTTP_204_NO_CONTENT, tags=["workflows"]
+)
 def delete_workflow(workflow_id: int, db: Session = Depends(get_db)):
     workflows_services.delete_workflow(workflow_id=workflow_id, db=db)
     return {"message": "Workflow deleted"}, status.HTTP_204_NO_CONTENT
