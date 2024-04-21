@@ -83,7 +83,7 @@ class BaseNodeService:
     def delete_node(self, node_id: int, db: Session = Depends(get_db)):
         node = get_object_by_id(model=self.node_model, object_id=node_id, db_session=db)
         delete_object(object=node, db_session=db)
-        return Response(status.HTTP_204_NO_CONTENT)
+        return status.HTTP_204_NO_CONTENT
 
 
 class NodeService:
