@@ -69,4 +69,4 @@ def test_delete_workflow(workflow_services, db_session):
     get_url = app.url_path_for("delete_workflow", workflow_id=created_workflow.id)
     response = client.delete(get_url)
 
-    assert response.status_code == 404
+    assert response.status_code == 204
