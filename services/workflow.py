@@ -38,11 +38,11 @@ class WorkflowGraph:
         """Add a node to the graph."""
         self.G.add_node(node)
 
-    def _add_edge(self, source: int, target: int, weight: int = None):
+    def _add_edge(self, source_node_id: int, target_node_id: int):
         """
         Add an edge to the graph.
         """
-        self.G.add_edge(source, target, weight=weight)
+        self.G.add_edge(source_node_id, target_node_id)
 
     def _validate_workflow(self, workflow: Workflow):
         """
@@ -101,13 +101,8 @@ class WorkflowGraph:
                         detail="Start node could not have any previous nodes",
                     )
             elif isinstance(node, ConditionNode):
-                condition_value: bool = True  # Assuming some condition check here
-                if condition_value:
-                    self._add_edge(node.id, node.yes_node_id)
-                    self._add_edge(node.id, node.no_node_id)
-                else:
-                    self._add_edge(node.id, node.yes_node_id)
-                    self._add_edge(node.id, node.no_node_id)
+                self._add_edge(node.id, node.yes_node_id)
+                self._add_edge(node.id, node.no_node_id)
             elif isinstance(node, EndNode):
                 self.last_node = node.id
 
@@ -195,8 +190,8 @@ class WorkflowServices:
         delete_object(workflow, db)
         return True
 
-    def create_and_run_graph(self, workflow_id: int, db: Session):
-        """Create and run the workflow graph."""
+    def create_and_run_sequence(self, workflow_id: int, db: Session):
+        """Create and run the workflow sequence."""
         workflow_graph = WorkflowGraph(workflow_id, db)
         workflow_graph.create_graph()
         return workflow_graph.run_graph()

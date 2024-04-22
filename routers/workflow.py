@@ -44,4 +44,4 @@ def delete_workflow(workflow_id: int, db: Session = Depends(get_db)):
     "/get-sequence/{workflow_id}", tags=["workflows"], status_code=status.HTTP_200_OK
 )
 def get_sequence(workflow_id: int, db: Session = Depends(get_db)):
-    return workflows_services.create_and_run_graph(db=db, workflow_id=workflow_id)
+    return workflows_services.create_and_run_sequence(db=db, workflow_id=workflow_id)
