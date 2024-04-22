@@ -3,11 +3,11 @@ from sqlalchemy.orm import Session
 
 from database.config import get_db
 from schemas.workflow import WorkflowCreateSchema, WorkflowUpdateSchema
-from services.workflow import WorkflowServices
+from services.workflow import WorkflowService
 
 router = APIRouter()
 
-workflows_services = WorkflowServices()
+workflows_services = WorkflowService()
 
 
 @router.post("/create/", status_code=status.HTTP_201_CREATED, tags=["workflows"])

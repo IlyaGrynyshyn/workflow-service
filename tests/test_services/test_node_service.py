@@ -16,7 +16,7 @@ from schemas.node import (
 )
 from schemas.workflow import WorkflowCreateSchema
 from services.node import NodeService
-from services.workflow import WorkflowServices
+from services.workflow import WorkflowService
 
 DATABASE_URL = "sqlite:///:memory:"
 
@@ -36,7 +36,7 @@ class BaseTestConfig:
 
     @pytest.fixture
     def workflow_services(self):
-        return WorkflowServices()
+        return WorkflowService()
 
     @pytest.fixture
     def node_services(self):

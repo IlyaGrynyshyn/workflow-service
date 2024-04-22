@@ -127,7 +127,7 @@ class WorkflowGraph:
         return response_data
 
 
-class WorkflowServices:
+class WorkflowService:
     """
     A class to provide workflow services.
     """

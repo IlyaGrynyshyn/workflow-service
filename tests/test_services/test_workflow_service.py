@@ -2,9 +2,9 @@ import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from database.models import Base
+from database.config import Base
 from schemas.workflow import WorkflowCreateSchema, WorkflowUpdateSchema
-from services.workflow import WorkflowServices
+from services.workflow import WorkflowService
 
 DATABASE_URL = "sqlite:///:memory:"
 
@@ -22,7 +22,7 @@ def db_session():
 
 @pytest.fixture
 def workflow_services():
-    return WorkflowServices()
+    return WorkflowService()
 
 
 def test_create_workflow(workflow_services, db_session):

@@ -3,7 +3,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from starlette.testclient import TestClient
 
-from database.models import Base
 from main import app
 from schemas.node import (
     StartNodeSchema,
@@ -13,7 +12,7 @@ from schemas.node import (
     NodeStatus,
 )
 from services.node import NodeService
-from services.workflow import WorkflowServices
+from services.workflow import WorkflowService
 
 DATABASE_URL = "sqlite:///:memory:"
 
@@ -32,7 +31,7 @@ class BaseTestConfig:
 
     @pytest.fixture
     def workflow_services(self):
-        return WorkflowServices()
+        return WorkflowService()
 
     @pytest.fixture
     def node_services(self):
@@ -41,7 +40,6 @@ class BaseTestConfig:
 
 class TestCreateNodeRouter(BaseTestConfig):
     def test_create_start_node(self):
-        Base.metadata.create_all(bind=engine)
         node_data = StartNodeSchema(workflow_id=123, next_node_id=1)
         create_url = app.url_path_for("create_start_node")
         response1 = client.post(create_url, json=node_data.dict())
@@ -53,7 +51,6 @@ class TestCreateNodeRouter(BaseTestConfig):
         assert response2.json() == {
             "detail": "StartNode already exists for this workflow"
         }
-        Base.metadata.drop_all(bind=engine)
 
     def test_create_message_node(self):
         node_data = MessageNodeSchema(
@@ -81,18 +78,15 @@ class TestCreateNodeRouter(BaseTestConfig):
         assert response.json()["no_node_id"] == node_data.no_node_id
 
     def test_create_end_node(self):
-        Base.metadata.create_all(bind=engine)
         node_data = EndNodeSchema(workflow_id=123)
         create_url = app.url_path_for("create_end_node")
         response = client.post(create_url, json=node_data.dict())
         assert response.status_code == 201
         assert response.json()["workflow_id"] == node_data.workflow_id
-        Base.metadata.drop_all(bind=engine)
 
 
 class TestGetNodeRouter(BaseTestConfig):
     def test_get_node(self, node_services, db_session):
-        Base.metadata.create_all(bind=engine)
         node_data = StartNodeSchema(workflow_id=123, next_node_id=2)
         create_url = app.url_path_for("create_start_node")
         client.post(create_url, json=node_data.dict())
@@ -101,7 +95,6 @@ class TestGetNodeRouter(BaseTestConfig):
         response_get = client.get(get_url)
         assert response_get.status_code == 200
         assert response_get.json()["workflow_id"] == node_data.workflow_id
-        Base.metadata.drop_all(bind=engine)
 
 
 class TestUpdateNodeRouter(BaseTestConfig):

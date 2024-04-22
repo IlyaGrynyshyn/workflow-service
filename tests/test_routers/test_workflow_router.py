@@ -1,13 +1,13 @@
 import pytest
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, declarative_base
 from starlette.testclient import TestClient
 
-from database.models import Base, Workflow
+
+from database.config import Base
 from main import app
-from routers.node import router
 from schemas.workflow import WorkflowCreateSchema, WorkflowUpdateSchema
-from services.workflow import WorkflowServices
+from services.workflow import WorkflowService
 
 DATABASE_URL = "sqlite:///:memory:"
 
@@ -15,6 +15,9 @@ engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 client = TestClient(app)
+
+# Base = declarative_base()
+
 
 
 @pytest.fixture(scope="function")
@@ -26,7 +29,7 @@ def db_session():
 
 @pytest.fixture
 def workflow_services():
-    return WorkflowServices()
+    return WorkflowService()
 
 
 def test_create_workflow(workflow_services, db_session):
