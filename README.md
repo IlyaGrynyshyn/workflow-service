@@ -56,7 +56,7 @@ The API has the following functionality:
 2. **Running:**
     - Run with unicorn - 
     ```bash
-    `uvicorn main:app`
+    uvicorn main:app
 
 3. **Running with Docker Compose**
     ```bash
