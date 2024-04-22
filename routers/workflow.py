@@ -40,6 +40,8 @@ def delete_workflow(workflow_id: int, db: Session = Depends(get_db)):
     return {"message": "Workflow deleted"}, status.HTTP_204_NO_CONTENT
 
 
-@router.post("/run-sequence/{workflow_id}", tags=["workflows"])
-def run_sequence(workflow_id: int, db: Session = Depends(get_db)):
+@router.get(
+    "/get-sequence/{workflow_id}", tags=["workflows"], status_code=status.HTTP_200_OK
+)
+def get_sequence(workflow_id: int, db: Session = Depends(get_db)):
     return workflows_services.create_and_run_graph(db=db, workflow_id=workflow_id)
