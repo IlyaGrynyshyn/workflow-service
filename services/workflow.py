@@ -155,6 +155,8 @@ class WorkflowService:
         workflow = get_object_by_id(
             model=Workflow, object_id=workflow_id, db_session=db
         )
+        if not workflow:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
         return workflow
 
     def update_workflow(

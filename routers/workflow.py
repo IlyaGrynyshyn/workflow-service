@@ -17,10 +17,7 @@ def create_workflow(workflow_data: WorkflowCreateSchema, db: Session = Depends(g
 
 @router.get("/get/{workflow_id}/", status_code=status.HTTP_200_OK, tags=["workflows"])
 def get_workflow(workflow_id: int, db: Session = Depends(get_db)):
-    workflow = workflows_services.get_workflow(workflow_id=workflow_id, db=db)
-    if workflow:
-        return workflow
-    raise HTTPException(status_code=404, detail="Workflow not found")
+    return workflows_services.get_workflow(workflow_id=workflow_id, db=db)
 
 
 @router.put(
